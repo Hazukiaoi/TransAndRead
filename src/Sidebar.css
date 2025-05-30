@@ -3,16 +3,16 @@
   padding: 10px;
   height: 100%;
   transition: width 0.3s ease, padding 0.3s ease;
-  width: 250px; /* Default width */
+  width: 250px; 
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
 }
 
 .sidebar.collapsed {
-  width: 60px; /* Collapsed width */
-  padding: 10px 5px; /* Adjust padding when collapsed */
-  align-items: center; /* Center the toggle button when collapsed */
+  width: 60px; 
+  padding: 10px 5px; 
+  align-items: center; 
 }
 
 .sidebar-toggle-button {
@@ -23,18 +23,21 @@
   margin-bottom: 15px;
   border-radius: 4px;
   cursor: pointer;
-  width: 100%; /* Full width of its container */
+  width: 100%; 
   text-align: center;
-  font-size: 1.2em; /* Slightly larger for better visibility */
+  font-size: 1.2em; 
 }
 
 .sidebar.collapsed .sidebar-toggle-button {
-  width: auto; /* Fit content when collapsed */
-  font-size: 1.5em; /* Make arrow bigger when only icon is shown */
+  width: auto; 
+  font-size: 1.5em; 
 }
 
+.sidebar-nav { /* Added class for main navigation list */
+  flex-grow: 1; /* Allows actions to be pushed to the bottom */
+}
 
-.sidebar nav ul {
+.sidebar nav ul { /* General ul styling if needed */
   list-style-type: none;
   padding: 0;
   margin: 0;
@@ -56,6 +59,55 @@
   color: white;
 }
 
-.sidebar.collapsed nav {
-  display: none; /* Hide navigation text when collapsed */
+.sidebar.collapsed .sidebar-nav { /* Hide nav text when collapsed */
+  display: none; 
+}
+
+.sidebar-actions {
+  margin-top: auto; /* Pushes this section to the bottom */
+  padding-top: 15px; /* Space above the action buttons */
+  border-top: 1px solid #ddd; /* Separator line */
+}
+
+.translation-button {
+  width: 100%;
+  padding: 12px 15px;
+  font-size: 1em;
+  background-color: #28a745; /* Green for "Start" */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative; /* For progress bar positioning */
+  overflow: hidden; /* To contain the progress bar */
+  transition: background-color 0.3s ease;
+}
+
+.translation-button.translating {
+  background-color: #dc3545; /* Red for "Stop" */
+}
+
+.translation-button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+.translation-button:disabled:hover {
+  background-color: #5a6268;
+}
+
+
+.translation-progress-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.3); /* Lighter overlay for progress */
+  width: 0%; /* Controlled by inline style */
+  transition: width 0.2s ease-out; /* Smooth progress update */
+  z-index: 1;
+}
+
+.translation-button-label {
+  position: relative;
+  z-index: 2; /* Ensure label is above progress bar */
 }
