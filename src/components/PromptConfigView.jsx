@@ -42,7 +42,7 @@ export default function PromptConfigView({ promptsConfig, setPromptsConfig }) {
     }));
     alert(`Prompts for "${promptsConfig[selectedPromptType]?.typeName || selectedPromptType}" saved!`);
   };
-  
+
   const handleTypeSelection = (typeKey) => {
     // Before switching, consider if changes should be auto-saved or if a save button is enough
     // For now, changes are local until "Save Prompts" is clicked.

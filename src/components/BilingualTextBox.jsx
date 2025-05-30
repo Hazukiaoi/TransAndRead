@@ -30,7 +30,7 @@ export default function BilingualTextBox({
     y: 0,
     cursorPosInTa: null, // { area: 'original' | 'translated', position: number }
   });
-  
+
   const originalTextAreaRef = useRef(null);
   const translatedTextAreaRef = useRef(null);
 
@@ -47,7 +47,7 @@ export default function BilingualTextBox({
       if (onTranslatedChange) onTranslatedChange(value);
     }
   };
-  
+
   const adjustHeight = (event) => {
     const textarea = event.target;
     textarea.style.height = 'auto';
@@ -72,43 +72,43 @@ export default function BilingualTextBox({
   };
 
   const menuItems = [
-    { 
-      label: '从这里分两段 (Split here)', 
+    {
+      label: '从这里分两段 (Split here)',
       action: () => onSplitSegment(segmentIndex, contextMenu.cursorPosInTa),
       disabled: !onSplitSegment || contextMenu.cursorPosInTa === null
     },
-    { 
-      label: '翻译这一段 (Translate this segment)', 
+    {
+      label: '翻译这一段 (Translate this segment)',
       action: () => onTranslateThisSegment(segmentIndex),
       disabled: !onTranslateThisSegment
     },
-    { 
-      label: '向上合并 (Merge up)', 
-      action: () => onMergeUp(segmentIndex), 
-      disabled: !onMergeUp || isFirstSegment 
+    {
+      label: '向上合并 (Merge up)',
+      action: () => onMergeUp(segmentIndex),
+      disabled: !onMergeUp || isFirstSegment
     },
-    { 
-      label: '向下合并 (Merge down)', 
-      action: () => onMergeDown(segmentIndex), 
-      disabled: !onMergeDown || isLastSegment 
+    {
+      label: '向下合并 (Merge down)',
+      action: () => onMergeDown(segmentIndex),
+      disabled: !onMergeDown || isLastSegment
     },
-    { 
-      label: '下方插入空段 (Insert empty segment below)', 
+    {
+      label: '下方插入空段 (Insert empty segment below)',
       action: () => onInsertEmptySegmentBelow(segmentIndex),
       disabled: !onInsertEmptySegmentBelow
     },
-    isChapterStart ? { 
-      label: '取消章节指定 (Unmark chapter start)', 
+    isChapterStart ? {
+      label: '取消章节指定 (Unmark chapter start)',
       action: () => onUnmarkChapterStart(segmentIndex),
       disabled: !onUnmarkChapterStart
-    } : { 
-      label: '指定为章节开头 (Mark as chapter start)', 
+    } : {
+      label: '指定为章节开头 (Mark as chapter start)',
       action: () => onMarkAsChapterStart(segmentIndex),
       disabled: !onMarkAsChapterStart
     },
     { type: 'separator' }, // Visual separator if ContextMenu supports it
-    { 
-      label: '删除选定 (Delete selected)', 
+    {
+      label: '删除选定 (Delete selected)',
       action: () => onDeleteSegment(segmentIndex),
       disabled: !onDeleteSegment
     },

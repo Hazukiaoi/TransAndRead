@@ -32,14 +32,14 @@ export function segmentArticleForTranslation(article, maxTextLength) {
       // A more complex version might need to preserve empty segments in the batch structure.
       return; // Skip purely empty src segments from batching for LLM
     }
-    
+
     if (segmentLength > maxTextLength) {
       // Handle segments that themselves exceed maxTextLength
       // Option 1: Truncate (data loss)
       // Option 2: Split the segment further (complex, requires word boundary logic)
       // Option 3: Send as is and hope LLM handles it (API might reject)
       // Option 4: Add to current batch and let it exceed, or start new batch
-      
+
       // If a batch is open, close it first
       if (currentBatch.length > 0) {
         batches.push(currentBatch);

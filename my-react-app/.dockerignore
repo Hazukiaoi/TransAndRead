@@ -15,7 +15,7 @@ Dockerfile
 
 # Build output directory (if it exists locally before build)
 # This is usually handled by WORKDIR /app then COPY, but good to have.
-dist 
+dist
 # Electron build output
 release/
 

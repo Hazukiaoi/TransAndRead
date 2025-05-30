@@ -20,7 +20,7 @@ export default function TranslateConfigView({ translateConfig, setTranslateConfi
       if (isNaN(numericValue)) {
         // Handle invalid number input, e.g., by not updating or showing an error
         console.warn(`Invalid number for ${key}: ${value}`);
-        return; 
+        return;
       }
     }
 
@@ -74,7 +74,7 @@ export default function TranslateConfigView({ translateConfig, setTranslateConfi
       description: '请求等待的最长时间（秒），如果超时未收到回复，则视为失败。',
       type: 'number', // Float input, step="any" or step="0.1" can be added
       value: translateConfig.timeoutThreshold,
-      step: "0.1" 
+      step: "0.1"
     },
     {
       key: 'taskRetryThreshold',

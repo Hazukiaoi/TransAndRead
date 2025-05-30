@@ -1,16 +1,16 @@
 import React from 'react';
 
-export default function Sidebar({ 
-  collapsed, 
-  setCollapsed, 
+export default function Sidebar({
+  collapsed,
+  setCollapsed,
   setCurrentView,
   isTranslating,
   translationProgress,
   articleLoaded,
   onStartTranslation,
-  onStopTranslation 
+  onStopTranslation
 }) {
-  
+
   const getTranslationButtonLabel = () => {
     if (isTranslating) {
       return `停止翻译 (${translationProgress}%)`;
@@ -23,7 +23,7 @@ export default function Sidebar({
       <button onClick={() => setCollapsed(!collapsed)} className="sidebar-toggle-button">
         {collapsed ? '➡️' : '⬅️'}
       </button>
-      
+
       {!collapsed && (
         <>
           <nav className="sidebar-nav">
@@ -50,14 +50,14 @@ export default function Sidebar({
           </nav>
 
           <div className="sidebar-actions">
-            <button 
+            <button
               className={`translation-button ${isTranslating ? 'translating' : ''}`}
               onClick={isTranslating ? onStopTranslation : onStartTranslation}
               disabled={!articleLoaded && !isTranslating} // Disabled if no article and not currently translating
               title={!articleLoaded && !isTranslating ? "Load a file to start translation" : ""}
             >
-              <div 
-                className="translation-progress-bar" 
+              <div
+                className="translation-progress-bar"
                 style={{ width: isTranslating ? `${translationProgress}%` : '0%' }}
               ></div>
               <span className="translation-button-label">{getTranslationButtonLabel()}</span>

@@ -78,8 +78,8 @@ export default function BilingualTranslationView({
               <ul>
                 {chapters.length > 0 ? (
                   chapters.map((chap) => (
-                    <li 
-                      key={chap.id} 
+                    <li
+                      key={chap.id}
                       onClick={() => scrollToSegment(chap.index)}
                       className={activeChapterIndex === chap.index ? 'active-chapter' : ''}
                     >
