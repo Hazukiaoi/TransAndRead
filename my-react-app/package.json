@@ -2,6 +2,8 @@
   "name": "my-react-app",
   "private": true,
   "version": "0.1.0",
+  "description": "Bilingual translation editor application.",
+  "author": "My Translator App Developer",
   "type": "module",
   "main": "electron.js",
   "scripts": {
@@ -24,7 +26,7 @@
     "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react": "^4.4.1",
     "concurrently": "^9.1.2",
-    "electron": "^36.3.2",
+    "electron": "31.0.0",
     "electron-builder": "^26.0.12",
     "eslint": "^9.25.0",
     "eslint-plugin-react-hooks": "^5.2.0",

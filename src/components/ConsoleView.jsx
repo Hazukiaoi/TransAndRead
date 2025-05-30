@@ -21,7 +21,7 @@ export default function ConsoleView() {
       alert("Log clearing function not available.");
     }
   };
-  
+
   return (
     <div className="console-view">
       <div className="console-header">

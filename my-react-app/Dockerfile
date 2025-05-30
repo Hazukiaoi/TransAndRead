@@ -9,9 +9,9 @@ COPY package.json package-lock.json* ./
 
 # Install dependencies
 # Using npm ci for cleaner installs if package-lock.json is present and reliable
-# RUN npm ci --omit=dev 
+# RUN npm ci --omit=dev
 # Using npm install for broader compatibility if package-lock might not be perfect
-RUN npm install --omit=dev 
+RUN npm install --omit=dev
 # If your build process itself needs devDependencies (e.g. vite, typescript), then don't use --omit=dev
 # RUN npm install
 

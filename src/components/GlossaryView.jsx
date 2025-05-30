@@ -5,7 +5,7 @@ import { useLogger } from '../contexts/LoggingContext';
 
 export default function GlossaryView({ wordTable, setWordTable, onBuildGlossary, articleLoaded }) {
   const { addLog } = useLogger();
-  const [editableCell, setEditableCell] = useState(null); 
+  const [editableCell, setEditableCell] = useState(null);
   const [selectedRows, setSelectedRows] = useState(new Set());
   const [isBuilding, setIsBuilding] = useState(false);
 
@@ -16,16 +16,16 @@ export default function GlossaryView({ wordTable, setWordTable, onBuildGlossary,
 
   const handleCellChange = (e, rowIndex, colIndex) => {
     const newValue = e.target.value;
-    const updatedTable = wordTable.map((row, rIdx) => 
+    const updatedTable = wordTable.map((row, rIdx) =>
       rIdx === rowIndex ? row.map((cell, cIdx) => (cIdx === colIndex ? newValue : cell)) : row
     );
     setWordTable(updatedTable);
   };
 
   const handleCellBlur = () => {
-    setEditableCell(null); 
+    setEditableCell(null);
   };
-  
+
   const handleKeyPress = (e, rowIndex, colIndex) => {
     if (e.key === 'Enter') {
         setEditableCell(null);
@@ -52,7 +52,7 @@ export default function GlossaryView({ wordTable, setWordTable, onBuildGlossary,
       return newSelectedRows;
     });
   };
-  
+
   const handleDeleteSelectedTerms = () => {
     if (selectedRows.size === 0) {
         alert("No terms selected for deletion.");
@@ -63,7 +63,7 @@ export default function GlossaryView({ wordTable, setWordTable, onBuildGlossary,
     addLog(`Deleted ${selectedRows.size} selected terms from glossary.`, "action");
     setSelectedRows(new Set());
   };
-  
+
   const handleDeleteSingleTerm = (rowIndex) => {
     const termToDelete = wordTable[rowIndex];
     const newTable = wordTable.filter((_, index) => index !== rowIndex);
@@ -109,16 +109,16 @@ export default function GlossaryView({ wordTable, setWordTable, onBuildGlossary,
       addLog("Glossary cleared by user.", "action");
     }
   };
-  
+
   useEffect(() => {
     const handleKeyDown = (e) => {
         // Check if the active element is part of the glossary table or its controls
         // to avoid conflicts with other global listeners or text inputs.
-        const isGlossaryActive = document.querySelector('.glossary-view')?.contains(document.activeElement) 
+        const isGlossaryActive = document.querySelector('.glossary-view')?.contains(document.activeElement)
                                  || document.activeElement.tagName === 'BODY'; // Or if body is active
-                                 
+
         if (e.key === 'Delete' && selectedRows.size > 0 && isGlossaryActive) {
-            if (document.activeElement && ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName) && 
+            if (document.activeElement && ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName) &&
                 !document.activeElement.closest('.glossary-table-container')) { // Ensure not in table input
                 return;
             }
@@ -156,10 +156,10 @@ export default function GlossaryView({ wordTable, setWordTable, onBuildGlossary,
             {(wordTable || []).map((row, rowIndex) => (
               <tr key={rowIndex} className={selectedRows.has(rowIndex) ? 'selected-row' : ''}>
                 <td className="select-col">
-                  <input 
-                    type="checkbox" 
+                  <input
+                    type="checkbox"
                     checked={selectedRows.has(rowIndex)}
-                    onChange={() => handleRowSelection(rowIndex)} 
+                    onChange={() => handleRowSelection(rowIndex)}
                   />
                 </td>
                 {row.map((cell, colIndex) => (

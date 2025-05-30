@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './LlmConfigView.css';
-import { callLlmApi } from '../utils/llmUtils'; 
+import { callLlmApi } from '../utils/llmUtils';
 import { useLogger } from '../contexts/LoggingContext'; // Import useLogger
 
 export default function LlmConfigView({
@@ -13,11 +13,11 @@ export default function LlmConfigView({
   llmCustomParams,
   setLlmCustomParams,
   availableModels = [],
-  translateConfig, 
+  translateConfig,
   // addLog prop is now implicitly available via useLogger if LlmConfigView is wrapped in Provider
 }) {
   const { addLog } = useLogger(); // Use the logger
-  const [testButtonStatus, setTestButtonStatus] = useState('idle'); 
+  const [testButtonStatus, setTestButtonStatus] = useState('idle');
   const [testButtonMessage, setTestButtonMessage] = useState('');
 
   const handleGetModelsFromServer = () => {
@@ -55,8 +55,8 @@ export default function LlmConfigView({
         addLog(`Adjusted API URL for test to: ${fullApiUrl}`, 'detail');
     }
 
-    const messages = [{ role: 'user', content: '自我介绍' }]; 
-    
+    const messages = [{ role: 'user', content: '自我介绍' }];
+
     const paramsForApi = llmCustomParams.reduce((acc, param) => {
       if (param.key) acc[param.key] = param.value;
       return acc;
@@ -85,7 +85,7 @@ export default function LlmConfigView({
       addLog(errorMsg + (result.details ? ` Details: ${result.details}` : ''), 'error');
       console.error("Test API call failed details:", result);
     }
-    setTimeout(() => { setTestButtonStatus('idle'); setTestButtonMessage(''); }, 5000); 
+    setTimeout(() => { setTestButtonStatus('idle'); setTestButtonMessage(''); }, 5000);
   };
 
   const handleAddModelParameter = () => {
@@ -98,7 +98,7 @@ export default function LlmConfigView({
   };
 
   const handleModelParameterChange = (index, field, value) => {
-    const newParams = llmCustomParams.map((param, i) => 
+    const newParams = llmCustomParams.map((param, i) =>
       i === index ? { ...param, [field]: value } : param
     );
     setLlmCustomParams(newParams);
@@ -140,9 +140,9 @@ export default function LlmConfigView({
               <option key={index} value={model.id || model.name || model} />
             ))}
           </datalist>
-          <select 
-            id="llmModelSelect" 
-            value={llmModel} 
+          <select
+            id="llmModelSelect"
+            value={llmModel}
             onChange={(e) => setLlmModel(e.target.value)}
             className="model-dropdown"
           >
@@ -202,8 +202,8 @@ export default function LlmConfigView({
       </div>
 
       <div className="config-section">
-        <button 
-          onClick={handleTestServer} 
+        <button
+          onClick={handleTestServer}
           className={`test-server-button ${testButtonStatus}`}
           disabled={testButtonStatus === 'testing'}
         >

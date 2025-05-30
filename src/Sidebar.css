@@ -3,16 +3,16 @@
   padding: 10px;
   height: 100%;
   transition: width 0.3s ease, padding 0.3s ease;
-  width: 250px; 
+  width: 250px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
 }
 
 .sidebar.collapsed {
-  width: 60px; 
-  padding: 10px 5px; 
-  align-items: center; 
+  width: 60px;
+  padding: 10px 5px;
+  align-items: center;
 }
 
 .sidebar-toggle-button {
@@ -23,14 +23,14 @@
   margin-bottom: 15px;
   border-radius: 4px;
   cursor: pointer;
-  width: 100%; 
+  width: 100%;
   text-align: center;
-  font-size: 1.2em; 
+  font-size: 1.2em;
 }
 
 .sidebar.collapsed .sidebar-toggle-button {
-  width: auto; 
-  font-size: 1.5em; 
+  width: auto;
+  font-size: 1.5em;
 }
 
 .sidebar-nav { /* Added class for main navigation list */
@@ -60,7 +60,7 @@
 }
 
 .sidebar.collapsed .sidebar-nav { /* Hide nav text when collapsed */
-  display: none; 
+  display: none;
 }
 
 .sidebar-actions {

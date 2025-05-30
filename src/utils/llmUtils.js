@@ -48,11 +48,11 @@ export async function callLlmApi({
 
     if (!response.ok) {
       const errorBody = await response.text(); // Try to get more info
-      return { 
-        error: true, 
-        status: response.status, 
+      return {
+        error: true,
+        status: response.status,
         message: `API request failed: ${response.statusText}`,
-        details: errorBody 
+        details: errorBody
       };
     }
 
