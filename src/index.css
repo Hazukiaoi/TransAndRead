@@ -1,0 +1,43 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; /* Prevent body scrollbars when app manages scrolling */
+}
+
+#root {
+  height: 100%;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Basic styling for react-resizable-panels */
+.panel-group {
+  display: flex;
+  height: 100%; /* Ensure PanelGroup takes full height of its container */
+}
+
+.panel-resize-handle {
+  background-color: #eee; /* A light color for the handle */
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  /* z-index: 1; */ /* Ensure it's above panels if there are positioning issues */
+}
+
+.panel-resize-handle[data-resize-handle-active="pointer"] {
+  background-color: #ddd; /* Darken when actively dragging */
+}
+
+/* Ensure panels themselves don't add extra padding/margin that breaks layout */
+.panel-group > .panel {
+  box-sizing: border-box;
+  overflow: auto; /* Add scroll to panels if their content overflows */
+}

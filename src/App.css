@@ -1,0 +1,36 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.main-layout {
+  display: flex;
+  flex-grow: 1;
+  /* Ensure PanelGroup takes full height */
+  height: calc(100vh - 58px); /* Adjust 58px based on actual Titlebar height */
+}
+
+.resize-handle {
+  background-color: #ccc;
+  width: 5px !important; /* Important to override default styles if necessary */
+  cursor: col-resize;
+}
+
+.sidebar-panel {
+  display: flex; /* Ensure content within panel stretches if needed */
+  flex-direction: column;
+  overflow: hidden; /* Prevent scrollbars from resize handle overlap */
+}
+
+.content-panel {
+  display: flex; /* Ensure content within panel stretches if needed */
+  flex-direction: column;
+  overflow: hidden; /* Prevent scrollbars from resize handle overlap */
+}
+
+/* Ensure child components of panels can take full height */
+.sidebar-panel > div, .content-panel > div {
+  height: 100%;
+  overflow: auto; /* Add scroll if content overflows */
+}
