@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './LlmConfigView.css';
-import { callLlmApi } from '../utils/llmUtils'; // Import the API call function
+import { callLlmApi } from '../utils/llmUtils'; 
+import { useLogger } from '../contexts/LoggingContext'; // Import useLogger
 
 export default function LlmConfigView({
   llmApiAddress,
@@ -12,64 +13,49 @@ export default function LlmConfigView({
   llmCustomParams,
   setLlmCustomParams,
   availableModels = [],
-  translateConfig, // Get timeout from translateConfig
-  // Props for test status feedback (to be added from App.jsx later if needed for global state)
-  // llmTestStatus, 
-  // setLlmTestStatus,
-  // llmTestMessage,
-  // setLlmTestMessage 
+  translateConfig, 
+  // addLog prop is now implicitly available via useLogger if LlmConfigView is wrapped in Provider
 }) {
-  const [testButtonStatus, setTestButtonStatus] = useState('idle'); // idle, testing, success, failure
+  const { addLog } = useLogger(); // Use the logger
+  const [testButtonStatus, setTestButtonStatus] = useState('idle'); 
   const [testButtonMessage, setTestButtonMessage] = useState('');
 
   const handleGetModelsFromServer = () => {
-    console.log('Attempting to fetch models...');
+    addLog('Attempting to fetch models from server (placeholder)...', 'info');
     alert('Simulated model fetch. Implement actual API call later.');
   };
 
   const handleTestServer = async () => {
     setTestButtonStatus('testing');
     setTestButtonMessage('Testing server connection...');
+    addLog(`Attempting to test LLM server at: ${llmApiAddress} with model: ${llmModel}`, 'info');
 
     if (!llmApiAddress || !llmApiAddress.trim()) {
         setTestButtonStatus('failure');
-        setTestButtonMessage('API Address is required.');
+        const msg = 'API Address is required.';
+        setTestButtonMessage(msg);
+        addLog(msg, 'warn');
         setTimeout(() => { setTestButtonStatus('idle'); setTestButtonMessage(''); }, 3000);
         return;
     }
     if (!llmModel || !llmModel.trim()) {
         setTestButtonStatus('failure');
-        setTestButtonMessage('Model is required.');
+        const msg = 'Model is required.';
+        setTestButtonMessage(msg);
+        addLog(msg, 'warn');
         setTimeout(() => { setTestButtonStatus('idle'); setTestButtonMessage(''); }, 3000);
         return;
     }
-    // API Key might be optional for some local LLMs
-    // if (!llmApiKey || !llmApiKey.trim()) {
-    //     setTestButtonStatus('failure');
-    //     setTestButtonMessage('API Key is required.');
-    //     setTimeout(() => { setTestButtonStatus('idle'); setTestButtonMessage(''); }, 3000);
-    //     return;
-    // }
 
-
-    // Ensure the API address ends with /v1/chat/completions or similar if it's a base URL
-    // For now, assume user enters the full path. Or, append if not present.
     let fullApiUrl = llmApiAddress;
     if (!fullApiUrl.endsWith('/v1/chat/completions') && !fullApiUrl.includes('/chat/completions')) {
-        // A common convention is that the user provides the base URL
-        // and we append the standard path.
-        // However, the design doc says "POST to http://api地址/v1/chat/completions"
-        // which implies the user *might* provide the full path.
-        // For robustness, if they provide base, append. If they provide full, use it.
-        // This simple check might not cover all cases.
         if (!fullApiUrl.endsWith('/')) fullApiUrl += '/';
         if (!fullApiUrl.endsWith('v1/')) fullApiUrl += 'v1/';
         fullApiUrl += 'chat/completions';
-        console.log("Adjusted API URL for test:", fullApiUrl);
+        addLog(`Adjusted API URL for test to: ${fullApiUrl}`, 'detail');
     }
 
-
-    const messages = [{ role: 'user', content: '自我介绍' }]; // Test message from design doc
+    const messages = [{ role: 'user', content: '自我介绍' }]; 
     
     const paramsForApi = llmCustomParams.reduce((acc, param) => {
       if (param.key) acc[param.key] = param.value;
@@ -87,16 +73,19 @@ export default function LlmConfigView({
 
     if (result.success) {
       setTestButtonStatus('success');
-      // const responseContent = result.data?.choices?.[0]?.message?.content || "No content in response";
-      // setTestButtonMessage(`Success! Response: ${responseContent.substring(0,100)}...`);
-      setTestButtonMessage(`Success! Received response from model.`);
-      console.log("Test API call successful:", result.data);
+      const responsePreview = result.data?.choices?.[0]?.message?.content || "No content in response";
+      const successMsg = `Success! LLM Response: ${responsePreview.substring(0,50)}...`;
+      setTestButtonMessage(successMsg);
+      addLog(successMsg, 'success');
+      console.log("Test API call successful data:", result.data);
     } else {
       setTestButtonStatus('failure');
-      setTestButtonMessage(`Error: ${result.message}`);
-      console.error("Test API call failed:", result);
+      const errorMsg = `Error testing LLM: ${result.message}`;
+      setTestButtonMessage(errorMsg);
+      addLog(errorMsg + (result.details ? ` Details: ${result.details}` : ''), 'error');
+      console.error("Test API call failed details:", result);
     }
-    setTimeout(() => { setTestButtonStatus('idle'); setTestButtonMessage(''); }, 5000); // Reset after 5s
+    setTimeout(() => { setTestButtonStatus('idle'); setTestButtonMessage(''); }, 5000); 
   };
 
   const handleAddModelParameter = () => {

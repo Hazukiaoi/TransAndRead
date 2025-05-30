@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './GlossaryView.css';
+import { useLogger } from '../contexts/LoggingContext';
 
-export default function GlossaryView({ wordTable, setWordTable }) {
-  const [editableCell, setEditableCell] = useState(null); // { rowIndex, colIndex }
+
+export default function GlossaryView({ wordTable, setWordTable, onBuildGlossary, articleLoaded }) {
+  const { addLog } = useLogger();
+  const [editableCell, setEditableCell] = useState(null); 
   const [selectedRows, setSelectedRows] = useState(new Set());
+  const [isBuilding, setIsBuilding] = useState(false);
 
-  // Make a local copy to enable direct editing before "saving" back to App state if needed,
-  // or operate directly on wordTable via setWordTable for simplicity.
-  // For now, direct modification for simplicity.
-  // const [localWordTable, setLocalWordTable] = useState([]);
-  // useEffect(() => { setLocalWordTable(wordTable || []); }, [wordTable]);
 
   const handleCellClick = (rowIndex, colIndex) => {
     setEditableCell({ rowIndex, colIndex });
@@ -24,13 +23,12 @@ export default function GlossaryView({ wordTable, setWordTable }) {
   };
 
   const handleCellBlur = () => {
-    setEditableCell(null); // Finish editing when focus is lost
+    setEditableCell(null); 
   };
   
   const handleKeyPress = (e, rowIndex, colIndex) => {
     if (e.key === 'Enter') {
         setEditableCell(null);
-        // Optionally move to next cell or row
         if (colIndex < 2) {
             setEditableCell({rowIndex, colIndex: colIndex + 1});
         } else if (rowIndex < wordTable.length -1) {
@@ -38,22 +36,19 @@ export default function GlossaryView({ wordTable, setWordTable }) {
         }
     } else if (e.key === 'Escape') {
         setEditableCell(null);
-        // TODO: Revert cell change if needed, though current setup saves on change.
     }
   };
 
   const handleAddTerm = () => {
     setWordTable([...(wordTable || []), ["", "", ""]]);
+    addLog("Added new empty term to glossary.", "action");
   };
 
   const handleRowSelection = (rowIndex) => {
     setSelectedRows(prevSelectedRows => {
       const newSelectedRows = new Set(prevSelectedRows);
-      if (newSelectedRows.has(rowIndex)) {
-        newSelectedRows.delete(rowIndex);
-      } else {
-        newSelectedRows.add(rowIndex);
-      }
+      if (newSelectedRows.has(rowIndex)) newSelectedRows.delete(rowIndex);
+      else newSelectedRows.add(rowIndex);
       return newSelectedRows;
     });
   };
@@ -65,72 +60,74 @@ export default function GlossaryView({ wordTable, setWordTable }) {
     }
     const newTable = wordTable.filter((_, index) => !selectedRows.has(index));
     setWordTable(newTable);
+    addLog(`Deleted ${selectedRows.size} selected terms from glossary.`, "action");
     setSelectedRows(new Set());
   };
   
   const handleDeleteSingleTerm = (rowIndex) => {
+    const termToDelete = wordTable[rowIndex];
     const newTable = wordTable.filter((_, index) => index !== rowIndex);
     setWordTable(newTable);
-    setSelectedRows(prev => { // Ensure deleted row is removed from selection
-        prev.delete(rowIndex);
-        return new Set(prev);
-    });
+    addLog(`Deleted term: [${termToDelete.join(', ')}] from glossary.`, "action");
+    setSelectedRows(prev => { prev.delete(rowIndex); return new Set(prev); });
   };
 
-
-  const handleBuildGlossary = () => {
-    console.log("Placeholder: Build Glossary button clicked.");
-    alert("Build Glossary functionality not yet implemented.");
+  const triggerBuildGlossary = async () => {
+    if (!articleLoaded) {
+        alert("Please load an article first to extract glossary from.");
+        addLog("Build Glossary attempt failed: No article loaded.", "warn");
+        return;
+    }
+    setIsBuilding(true);
+    addLog("Starting glossary extraction...", "info");
+    await onBuildGlossary(); // This is passed from App.jsx
+    setIsBuilding(false);
+    // addLog result is handled in App.jsx's onBuildGlossary
   };
 
   const handleExportGlossary = () => {
     if (!wordTable || wordTable.length === 0) {
       alert("Glossary is empty. Nothing to export.");
+      addLog("Export Glossary failed: Glossary is empty.", "warn");
       return;
     }
-    // Add header row as per design document for export
     const exportData = [["原文", "译文", "分类"], ...wordTable];
     const jsonString = JSON.stringify(exportData, null, 2);
     const blob = new Blob([jsonString], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url;
-    a.download = 'glossary.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    console.log("Export Glossary: glossary.json file download initiated.");
+    a.href = url; a.download = 'glossary.json';
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a); URL.revokeObjectURL(url);
+    addLog("Glossary exported as glossary.json.", "info");
   };
 
   const handleClearGlossary = () => {
     if (window.confirm("Are you sure you want to clear the entire glossary? This cannot be undone.")) {
       setWordTable([]);
       setSelectedRows(new Set());
+      addLog("Glossary cleared by user.", "action");
     }
   };
   
-  // Keyboard accessibility for delete
   useEffect(() => {
     const handleKeyDown = (e) => {
-        if (e.key === 'Delete' && selectedRows.size > 0 && currentView === 'glossary') { // Assuming currentView is available or this component is only active then
-            // Prevent interference if an input field is focused
-            if (document.activeElement && ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+        // Check if the active element is part of the glossary table or its controls
+        // to avoid conflicts with other global listeners or text inputs.
+        const isGlossaryActive = document.querySelector('.glossary-view')?.contains(document.activeElement) 
+                                 || document.activeElement.tagName === 'BODY'; // Or if body is active
+                                 
+        if (e.key === 'Delete' && selectedRows.size > 0 && isGlossaryActive) {
+            if (document.activeElement && ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName) && 
+                !document.activeElement.closest('.glossary-table-container')) { // Ensure not in table input
                 return;
             }
             handleDeleteSelectedTerms();
         }
     };
-    // This assumes `GlossaryView` is the active view. A more robust solution might need a global key listener manager
-    // or pass down a prop indicating if this view is active to attach/detach listener.
-    // For now, will attach it if wordTable is provided (i.e., component is likely active).
-    if (wordTable) { // Simple check
-        document.addEventListener('keydown', handleKeyDown);
-    }
-    return () => {
-        document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [selectedRows, wordTable]); // Rerun if selection or table changes
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [selectedRows, wordTable]); // Ensure dependencies are correct
 
   return (
     <div className="glossary-view">
@@ -138,7 +135,9 @@ export default function GlossaryView({ wordTable, setWordTable }) {
       <div className="glossary-actions">
         <button onClick={handleAddTerm}>Add Term (+)</button>
         <button onClick={handleDeleteSelectedTerms} disabled={selectedRows.size === 0}>Delete Selected</button>
-        <button onClick={handleBuildGlossary} className="placeholder-button">Build Glossary (构建词表)</button>
+        <button onClick={triggerBuildGlossary} className={isBuilding ? "building" : ""} disabled={isBuilding || !articleLoaded} title={!articleLoaded ? "Load an article first" : ""}>
+          {isBuilding ? "Building..." : "Build Glossary (构建词表)"}
+        </button>
         <button onClick={handleExportGlossary}>Export Glossary (导出词表)</button>
         <button onClick={handleClearGlossary} className="danger-button">Clear Glossary (清空)</button>
       </div>
@@ -175,18 +174,18 @@ export default function GlossaryView({ wordTable, setWordTable }) {
                         autoFocus
                       />
                     ) : (
-                      <span>{cell}</span>
+                      <span>{cell || ""}</span> {/* Ensure empty cells render the span for clickability */}
                     )}
                   </td>
                 ))}
                 <td className="action-col">
-                    <button onClick={() => handleDeleteSingleTerm(rowIndex)} className="delete-row-btn">✕</button>
+                    <button onClick={() => handleDeleteSingleTerm(rowIndex)} className="delete-row-btn" title="Delete this term">✕</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        {(!wordTable || wordTable.length === 0) && <p className="empty-glossary-message">Glossary is empty. Click "Add Term" to start.</p>}
+        {(!wordTable || wordTable.length === 0) && <p className="empty-glossary-message">Glossary is empty. Click "Add Term" to start or "Build Glossary" from an article.</p>}
       </div>
     </div>
   );
