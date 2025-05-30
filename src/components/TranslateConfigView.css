@@ -1,0 +1,99 @@
+.translate-config-view {
+  padding: 20px;
+  height: 100%;
+  overflow-y: auto;
+  background-color: #f9f9f9; /* Light background for the page */
+}
+
+.translate-config-view h2 {
+  margin-top: 0;
+  margin-bottom: 25px;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  text-align: center; /* Center the main title */
+}
+
+.config-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid */
+  gap: 20px;
+}
+
+.config-item-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Pushes input to the bottom */
+}
+
+.config-item-header {
+  margin-bottom: 10px;
+}
+
+.config-item-title {
+  font-size: 1.1em;
+  color: #007bff; /* Highlight title color */
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+.config-item-description {
+  font-size: 0.9em;
+  color: #555;
+  margin-bottom: 15px;
+  flex-grow: 1; /* Allows description to take available space */
+  line-height: 1.4;
+}
+
+.config-item-input {
+  margin-top: auto; /* Pushes input to the bottom if card heights vary due to text */
+}
+
+.config-item-input input[type="number"],
+.config-item-input input[type="text"], /* If any text inputs are used */
+.config-item-input select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 1em;
+  background-color: #fdfdfd;
+}
+
+.config-item-input input:focus,
+.config-item-input select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Optional: Style for number input spinners (browser dependent) */
+.config-item-input input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+}
+.config-item-input input[type="number"]::-webkit-inner-spin-button,
+.config-item-input input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Debug button styling if used */
+.debug-button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.debug-button:hover {
+    background-color: #5a6268;
+}

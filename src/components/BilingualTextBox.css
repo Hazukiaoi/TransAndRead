@@ -1,0 +1,45 @@
+.bilingual-textbox {
+  border: 1px solid #ccc; /* Using 1px border as a more standard default. Can be changed to 10px if specifically required. */
+  border-radius: 5px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* Dynamically adjust width to fit container */
+}
+
+.bilingual-textbox textarea {
+  width: 100%;
+  border: none;
+  padding: 10px;
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  resize: none; /* Disable manual resize, height adjusts to content */
+  min-height: 40px; /* Minimum height for one line, adjust as needed */
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.bilingual-textbox textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5); /* Example focus style */
+}
+
+.original-text-area {
+  background-color: #f0f0f0; /* Slightly darker background for original text */
+  border-bottom: 1px dashed #ccc; /* Separator line */
+  border-top-left-radius: 5px; /* Match parent's border radius */
+  border-top-right-radius: 5px; /* Match parent's border radius */
+}
+
+.translated-text-area {
+  background-color: #ffffff;
+  border-bottom-left-radius: 5px; /* Match parent's border radius */
+  border-bottom-right-radius: 5px; /* Match parent's border radius */
+}
+
+/* Ensure textareas still show placeholder and min-height even if empty */
+.original-text-area:empty::before,
+.translated-text-area:empty::before {
+  content: attr(placeholder);
+  display: block;
+  color: #999;
+}

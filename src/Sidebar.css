@@ -1,0 +1,61 @@
+.sidebar {
+  background-color: #f4f4f4;
+  padding: 10px;
+  height: 100%;
+  transition: width 0.3s ease, padding 0.3s ease;
+  width: 250px; /* Default width */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar.collapsed {
+  width: 60px; /* Collapsed width */
+  padding: 10px 5px; /* Adjust padding when collapsed */
+  align-items: center; /* Center the toggle button when collapsed */
+}
+
+.sidebar-toggle-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%; /* Full width of its container */
+  text-align: center;
+  font-size: 1.2em; /* Slightly larger for better visibility */
+}
+
+.sidebar.collapsed .sidebar-toggle-button {
+  width: auto; /* Fit content when collapsed */
+  font-size: 1.5em; /* Make arrow bigger when only icon is shown */
+}
+
+
+.sidebar nav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar nav li {
+  padding: 12px 15px;
+  margin-bottom: 8px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  font-size: 1em;
+  color: #333;
+}
+
+.sidebar nav li:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.sidebar.collapsed nav {
+  display: none; /* Hide navigation text when collapsed */
+}
